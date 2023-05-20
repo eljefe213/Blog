@@ -1,20 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategoryController!{% endblock %}
+{% block title %}{{ category.name }}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/Utilisateur/Desktop/Blog/Blog/src/Controller/CategoryController.php'|file_link(0) }}">src/Controller/CategoryController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/Utilisateur/Desktop/Blog/Blog/templates/category/index.html.twig'|file_link(0) }}">templates/category/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <main class="container">
+        <div class="row g-5">
+            <div class="col">
+                <h3 class="pb-4 mb-4 fst-italic border-bottom">{{category.name}}</h3>
+                <div id="article-list">
+                    {% include 'article/list.html.twig' with {articles:category.Articles, lefCol: 4 , rightCol:8} %}
+                </div>
+            </div>
+        </div>
+    </main>
 {% endblock %}
