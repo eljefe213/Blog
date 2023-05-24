@@ -1,3 +1,4 @@
+{% set menus = menu_service.findAll %}
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -44,6 +45,26 @@
                     <span class="fs-4">Mon Blog</span>
                 </a>
                 <ul class="nav nav-pills">
+
+                    {% for menu in menus %}
+                        {% if menu.subMenus.count > 0 %}
+                            <div class="dropdown">
+                                <a class="nav nav-link text-dark dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ menu.name }}
+                                </a>
+                                <ul class="dropdown-menu" >
+                                {% for subMenu in menu.subMenus %}
+                                    <li><a class="dropdown-item">{{subMenu.name}}</a></li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"  href="#">{{ menu.name }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
                     <li class="nav-item">
                         <a class="nav-link text-dark"  href="#">S'inscrire</a>
                     </li>

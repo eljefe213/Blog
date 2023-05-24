@@ -3,9 +3,15 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Menu;
+use App\Repository\MenuRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Menu\SubMenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -21,6 +27,7 @@ class MenuCrudController extends AbstractCrudController
     const MENU_CATEGORIES = 3;
 
     public function __construct(
+        private MenuRepository $menuRepo,
         private RequestStack $requestStack
     ) {
     }
@@ -29,6 +36,14 @@ class MenuCrudController extends AbstractCrudController
     {
         return Menu::class;
     }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+    {
+        $subMenuIndex = $this->getSubMenuIndex();
+
+        return $this->menuRepo->getIndexQueryBuilder($this->getFieldNameFromSubMenuIndex($subMenuIndex));
+    }
+
 
     public function configureCrud(Crud $crud): Crud
     {
@@ -64,14 +79,19 @@ class MenuCrudController extends AbstractCrudController
         yield AssociationField::new('subMenus', 'Sous-élèments');
     }
 
-    private function getFieldFromSubMenuIndex(int $subMenuIndex)
+    private function getFieldNameFromSubMenuIndex(int $subMenuIndex): string
     {
-        $fieldName = match ($subMenuIndex) {
+        return match ($subMenuIndex) {
             self::MENU_ARTICLES => 'article',
-            self::MENU_CATEGORIES => 'Category',
+            self::MENU_CATEGORIES => 'category',
             self::MENU_LINKS => 'link',
             default => 'page'
         };
+    }
+
+    private function getFieldFromSubMenuIndex(int $subMenuIndex)
+    {
+        $fieldName = $this->getFieldNameFromSubMenuIndex($subMenuIndex);
         return ($fieldName == 'link') ? TextField::new($fieldName, 'lien') : AssociationField::new($fieldName);
     }
 
