@@ -23,7 +23,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby ="dropMenuButtonAdminDashboard">
                         <li><a class="dropdown-item" href="{{path('admin')}}">Tableau de bord</a></li>
-                        <li><a class="dropdown-item" href="#">Menu</a></li>
+                        <li><a class="dropdown-item" href="{{ ea_index('MenuCrudController')}}">Menu</a></li>
                         
                     </ul>
                 </div>
@@ -54,14 +54,14 @@
                                 </a>
                                 <ul class="dropdown-menu" >
                                 {% for subMenu in menu.subMenus %}
-                                    <li><a class="dropdown-item">{{subMenu.name}}</a></li>
+                                    <li><a class="dropdown-item" href="{{ subMenu|menuLink }}">{{subMenu.name}}</a></li>
                                 {% endfor %}
                                 </ul>
                             </div>
 
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link text-dark"  href="#">{{ menu.name }}</a>
+                                <a class="nav-link text-dark"  href="{{menu|menuLink}}">{{ menu.name }}</a>
                             </li>
                         {% endif %}
                     {% endfor %}
