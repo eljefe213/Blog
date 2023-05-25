@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @method User getUser();
+ * @method User getUser()
  */
 class CommentController extends AbstractController
 {
