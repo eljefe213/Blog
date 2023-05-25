@@ -17,8 +17,10 @@
         </h2>
 
         <hr>
-
-        <div class="comment-area mb-5">{{form(commentForm, {'attr':{'class': 'comment-form'}})}}</div>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+             <div class="comment-area mb-5">{{form(commentForm, {'attr':{'class': 'comment-form'}})}}</div>
+        {% endif %}
+       
 
         <div class="comment-list">
             {% for comment in article.comments %}

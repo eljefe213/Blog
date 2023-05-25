@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+ <div class="container w-25">
+    <div class="row">
+        <div class="col">
+            <h2>Profile de {{user.username|capitalize}}</h2>
+
+            <div class="col-12">
+                <label for="username" class="form-label">Nom d'utilisateur</label>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text">@</span>
+                    <input type="text" class="form-control" value="{{user.username}}" readonly></input>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <p>Nombre de commentaires publié: {{user.comments|length}}</p>
+            </div>
+
+        </div>
+    </div>
+ </div>
+{% endblock %}
