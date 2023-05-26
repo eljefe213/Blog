@@ -26,7 +26,7 @@
                     <ul class="dropdown-menu" aria-labelledby ="dropMenuButtonAdminDashboard">
                         <li><a class="dropdown-item" href="{{path('admin')}}">Tableau de bord</a></li>
                         {% if is_granted('ROLE_ADMIN') %}
-                            <li><a class="dropdown-item" href="{{ ea_index('MenuCrudController')}}">Menu</a></li>
+                            <li><a class="dropdown-item" href="{{ ea_gen_url('MenuCrudController')}}">Menu</a></li>
                         {% endif %}
                         
                     </ul>
@@ -36,8 +36,8 @@
                     Ajouter
                     </a>
                     <ul class="dropdown-menu" aria-labelledby ="dropMenuButtonAdminAdd">
-                        <li><a class="dropdown-item" href="#">Article</a></li>
-                        <li><a class="dropdown-item" href="#">Page</a></li>
+                        <li><a class="dropdown-item" href="{{ea_gen_url('ArticleCrudController','new')}}">Article</a></li>
+                        <li><a class="dropdown-item" href="{{ea_gen_url('PageCrudController','new')}}">Page</a></li>
                         
                     </ul>
                 </div>
