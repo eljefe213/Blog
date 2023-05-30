@@ -7,20 +7,33 @@ use App\Entity\User;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
 use App\Repository\UserRepository;
+use App\Service\CommentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method User getUser()
  */
 class CommentController extends AbstractController
 {
-    #[Route('/ajax/comments', name: 'comment_add')]
+    public function __construct(
+        private ArticleRepository $articleRepo,
+        private CommentRepository $commentRepo,
+        private CommentService   $commentService
+    ) {
+    }
+    #[Route('/ajax/comments', name: 'comment_add', methods: ['POST'])]
     public function add(Request $request, ArticleRepository $articleRepo, CommentRepository $commentRepo, EntityManagerInterface $en, UserRepository $userRepo): Response
     {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->json([
+                'code' => 'NOT_AUTHENTICATED'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
         $commentData = $request->request->all('comment');
 
         if ($this->isCsrfTokenValid('comment-add', $commentData['_token'])) {
@@ -29,7 +42,8 @@ class CommentController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $article = $articleRepo->findOneBy(['id' => $commentData['article']]);
+        $article = $this->$articleRepo->findOneBy(['id' => $commentData['article']]);
+
 
         if (!$article) {
             return $this->json([
